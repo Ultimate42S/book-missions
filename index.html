@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" data-book-version="16-public">
+<html lang="fr" data-book-version="17-public">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -482,13 +482,13 @@ footer a{ color:var(--gold); text-decoration:none; }
   <h1>KADER KÉBAÏLI</h1>
   <p class="role">Directeur de Transformation SI · SI &amp; Organisation · Cybersécurité &amp; résilience · Schémas directeurs</p>
   <div class="stat-row" id="statRow"></div>
-  <p class="eyebrow" style="color:var(--text-dim); margin-top:24px; font-style:italic;">Missions documentées (1994–2026) · 37 missions marquantes · Région IdF / France &amp; International</p>
+  <p class="eyebrow" style="color:var(--text-dim); margin-top:24px; font-style:italic;">Missions documentées (1994–2026) · <span data-mission-count="plain">37</span> missions marquantes · Région IdF / France &amp; International</p>
 </section>
 
 <nav class="tabnav" id="tabnav">
   <div class="tabnav-inner">
     <button class="tab active" data-tab="profil">Profil</button>
-    <button class="tab" data-tab="missions">Missions <span class="tab-count">(36)</span></button>
+    <button class="tab" data-tab="missions">Missions <span class="tab-count" data-mission-count="parentheses">(37)</span></button>
     <button class="tab" data-tab="certifications">Certifications &amp; Diplômes</button>
   </div>
 </nav>
@@ -528,7 +528,7 @@ footer a{ color:var(--gold); text-decoration:none; }
 
 <div class="profile-block"><p class="section-label">Références professionnelles</p><p class="profile-body">Les clients sont présentés par leur secteur. Certains éléments de contexte ont été généralisés par discrétion professionnelle. Références communiquées sur demande, sous réserve de l’accord des clients concernés.</p></div>
     <div class="profile-cta">
-      <button class="cta-btn" id="ctaMissions">Voir les 37 missions →</button>
+      <button class="cta-btn" id="ctaMissions">Voir les <span data-mission-count="plain">37</span> missions →</button>
     </div>
 
   </div>
@@ -568,7 +568,7 @@ footer a{ color:var(--gold); text-decoration:none; }
     <div><span class="fa-label">Disponibilité</span><span class="fa-value">Immédiate</span></div>
     <div><span class="fa-label">Localisation</span><span class="fa-value">Île-de-France</span></div>
     <div><span class="fa-label">Missions</span><span class="fa-value">France &amp; International</span></div>
-    <div><span class="fa-label">Book</span><span class="fa-value">37 missions · 1994–2026 · KIS Consulting</span></div>
+    <div><span class="fa-label">Book</span><span class="fa-value"><span data-mission-count="plain">37</span> missions · 1994–2026 · KIS Consulting</span></div>
   </div>
 </footer>
 
@@ -585,6 +585,14 @@ let state = { search: '', sector: null, currentIndex: null };
 
 function el(html){ const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstChild; }
 function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// Mission totals always derive from the published mission list.
+function syncMissionCounts(){
+  document.querySelectorAll('[data-mission-count]').forEach(node=>{
+    node.textContent = node.dataset.missionCount === 'parentheses'
+      ? `(${MISSIONS.length})` : String(MISSIONS.length);
+  });
+}
 
 // ---- Stats ----
 function renderStats(){
@@ -871,6 +879,7 @@ document.querySelectorAll('.tab').forEach(t=>{
 document.getElementById('ctaMissions').addEventListener('click', ()=> showTab('missions'));
 
 // ---- Init ----
+syncMissionCounts();
 renderProfile();
 renderCertifications();
 renderStats();
